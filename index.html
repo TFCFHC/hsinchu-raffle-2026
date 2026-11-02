@@ -17,12 +17,19 @@
 </main>
 <script>
 // 測試期間維持 false；正式公布名單並核對完成後，才改為 true。
-const IS_OPEN = true;
+const IS_OPEN = false;
 // 正式上線時填入「六碼摸彩券號碼」對應「中獎序號」。目前僅為空白測試資料。
 const WINNERS = {
-  "000123": 120,
-  "001258": 121,
-  "005678": 122
+  "000412": 1,
+  "000659": 2,
+  "000843": 3,
+  "001105": 4,
+  "001378": 5,
+  "001592": 6,
+  "001830": 7,
+  "002047": 8,
+  "002281": 9,
+  "002496": 10
 };
 if(IS_OPEN){document.getElementById('closed').style.display='none';document.getElementById('entry').style.display='block'}
 function check(){const raw=document.getElementById('ticket').value.trim();const output=document.getElementById('result');if(!/^\d{1,6}$/.test(raw)){output.className='loser';output.textContent='請輸入1至6位數字的摸彩券號碼';return}const ticket=raw.padStart(6,'0');if(Object.prototype.hasOwnProperty.call(WINNERS,ticket)){output.className='winner';output.textContent=`🎊 恭喜您中獎！中獎序號：${WINNERS[ticket]}號（摸彩券號碼：${ticket}）`}else{output.className='loser';output.textContent='很抱歉，這次沒有中獎。'}}
