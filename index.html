@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2026新竹家扶中心冬暖園遊會摸彩查詢</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6f8;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;color:#27313a;padding:28px 16px}.panel{max-width:460px;margin:20px auto;background:#fff;padding:30px 24px;border-radius:20px;box-shadow:0 8px 30px #18263812;text-align:center}h1{font-size:23px;line-height:1.5;margin:0 0 16px}.hint{color:#667085;line-height:1.7}.status{padding:22px 12px;border-radius:12px;background:#fff8e9;margin:22px 0;color:#805700;font-size:21px;font-weight:700}.small{font-size:14px;font-weight:400;margin-top:8px}.entry{display:none}input{width:100%;font-size:25px;letter-spacing:3px;text-align:center;border:2px solid #b5bcc4;border-radius:12px;padding:14px;margin:12px 0}button{width:100%;border:0;border-radius:12px;background:#253b31;color:white;font-size:19px;font-weight:700;padding:15px;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}#result{margin-top:24px;line-height:1.8;min-height:40px;font-weight:700}.winner{color:#b34f12}.loser{color:#475467}.foot{font-size:12px;color:#98a2b3;margin-top:25px}
+</style>
+</head>
+<body>
+<main class="panel">
+<h1>🎉 2026新竹家扶中心冬暖園遊會摸彩查詢</h1>
+<div id="closed"><div class="status">🕒 尚未開放查詢<div class="small">請稍候再試</div></div><p class="hint">摸彩結束並完成中獎號碼核對後，才會開放查詢。</p></div>
+<section class="entry" id="entry"><p class="hint">請輸入您的6碼摸彩券號碼</p><input id="ticket" type="text" inputmode="numeric" maxlength="6" placeholder="例如 000123" autocomplete="off" aria-label="摸彩券號碼"><button id="search" type="button">查詢中獎結果</button><div id="result" aria-live="polite"></div></section>
+<div class="foot">新竹家扶中心｜請以主辦單位公布的中獎資料為準</div>
+</main>
+<script>
+// 測試期間維持 false；正式公布名單並核對完成後，才改為 true。
+const IS_OPEN = false;
+// 正式上線時填入「六碼摸彩券號碼」對應「中獎序號」。目前僅為空白測試資料。
+const WINNERS = {};
+if(IS_OPEN){document.getElementById('closed').style.display='none';document.getElementById('entry').style.display='block'}
+function check(){const raw=document.getElementById('ticket').value.trim();const output=document.getElementById('result');if(!/^\d{1,6}$/.test(raw)){output.className='loser';output.textContent='請輸入1至6位數字的摸彩券號碼';return}const ticket=raw.padStart(6,'0');if(Object.prototype.hasOwnProperty.call(WINNERS,ticket)){output.className='winner';output.textContent=`🎊 恭喜您中獎！中獎序號：${WINNERS[ticket]}號（摸彩券號碼：${ticket}）`}else{output.className='loser';output.textContent='很抱歉，這次沒有中獎。'}}
+document.getElementById('search').addEventListener('click',check);document.getElementById('ticket').addEventListener('keydown',e=>{if(e.key==='Enter')check()});
+</script>
+</body>
+</html>
