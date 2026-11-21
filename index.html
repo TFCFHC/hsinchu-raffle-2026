@@ -17,16 +17,51 @@
 </main>
 <script>
 // 測試期間維持 false；正式公布名單並核對完成後，才改為 true。
-const IS_OPEN = false;
-// 正式上線時填入「六碼摸彩券號碼」對應「中獎序號」。目前僅為空白測試資料。
-const WINNERS = {
-  "000716": 1,
-  "000663": 2,
-  "006296": 3,
-};
-if(IS_OPEN){document.getElementById('closed').style.display='none';document.getElementById('entry').style.display='block'}
+let WINNERS = {};
 function check(){const raw=document.getElementById('ticket').value.trim();const output=document.getElementById('result');if(!/^\d{1,6}$/.test(raw)){output.className='loser';output.textContent='請輸入1至6位數字的摸彩券號碼';return}const ticket=raw.padStart(6,'0');if(Object.prototype.hasOwnProperty.call(WINNERS,ticket)){output.className='winner';output.textContent=`🎊 恭喜您中獎！中獎序號：${WINNERS[ticket]}號（摸彩券號碼：${ticket}）`}else{output.className='loser';output.textContent='很抱歉，這次沒有中獎。'}}
-document.getElementById('search').addEventListener('click',check);document.getElementById('ticket').addEventListener('keydown',e=>{if(e.key==='Enter')check()});
+document.getElementById('search').const closed = document.getElementById('closed');
+const entry = document.getElementById('entry');
+const result = document.getElementById('result');
+let statusRequest;
+
+function refreshStatus() {
+  if (statusRequest) return statusRequest;
+
+  statusRequest = (async () => {
+    let isOpen = false;
+    try {
+      const response = await fetch('./status.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('無法讀取查詢狀態');
+
+      const status = await response.json();
+      WINNERS = status.winners ?? {};
+      isOpen = status.open === true;
+    } catch {
+      WINNERS = {};
+    }
+
+    closed.style.display = isOpen ? 'none' : 'block';
+    entry.style.display = isOpen ? 'block' : 'none';
+    if (!isOpen) result.textContent = '';
+    return isOpen;
+  })().finally(() => {
+    statusRequest = undefined;
+  });
+
+  return statusRequest;
+}
+
+async function checkIfOpen() {
+  if (await refreshStatus()) check();
+}
+
+document.getElementById('search').addEventListener('click', checkIfOpen);
+document.getElementById('ticket').addEventListener('keydown', event => {
+  if (event.key === 'Enter') checkIfOpen();
+});
+
+refreshStatus();
+setInterval(refreshStatus, 30000);
 </script>
 </body>
 </html>
